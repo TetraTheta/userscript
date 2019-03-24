@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         NAVER Compact Main
 // @namespace    https://github.com/TetraTheta
-// @version      0.1.1T-190324
+// @version      0.1.0.2T-190324
 // @description  Compact NAVER main screen by removing stuff
 // @author       TetraTheta
-// @match        *://*.naver.com/*
+// @match        *://www.naver.com/*
+// @match        *://search.naver.com/*
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @grant        none
 // ==/UserScript==
