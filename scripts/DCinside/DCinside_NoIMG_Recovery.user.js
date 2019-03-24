@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         DCinside NoIMG Recovery
-// @namespace    TetraTheta
-// @version      0.1-190113
+// @namespace    https://github.com/TetraTheta
+// @version      0.1.1T-190324
 // @description  Replacing NoIMG error and force-loading original image
 // @author       TetraTheta
 // @include      *.dcinside.co.kr/*
 // @include      *.dcinside.com/*
 // @run-at       document-start
+// @grant        none
 // ==/UserScript==
 
 document.onreadystatechange = function() {
