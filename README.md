@@ -9,4 +9,7 @@ This script replace 'No Image' error(a.k.a. 엑스박스) to original image.
 This script remove stuff from main screen and search screen.  
 Please note that this will not reduce the traffic you used. This script will just remove things after browser finished loading page.  
 [![Install Script](/assets/Install_Button.png?raw=true "Install Script")](https://github.com/TetraTheta/tetrauserjs/raw/master/scripts/NAVER/NAVER_Compact.user.js)
+* `GitHub_WordWrap.user.js`  
+This script word wraps GitHub code pages.  
+[![Install Script](/assets/Install_Button.png?raw=true "Install Script")](https://github.com/TetraTheta/tetrauserjs/raw/master/scripts/GitHub/GitHub_WordWrap.user.js)
 ---
