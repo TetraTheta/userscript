@@ -1,15 +1,16 @@
-# TetraUserJS  
-Some UserScript made by TetraTheta. Description are below.  
+# TetraUserJS
+These are some UserScripts made by me. Click the name of the script to install.
+
 ---
-* `DCinside_NoIMG_Recovery.user.js`  
-This script is for DCinside. Recently DCinside got DDOS attack, so many images doesn't load properly.  
-This script replace 'No Image' error(a.k.a. 엑스박스) to original image.  
-[![Install Script](/assets/Install_Button.png?raw=true "Install Script")](https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/DCinside/DCinside_NoIMG_Recovery.user.js)  
-* `NAVER_Compact.user.js`  
-This script remove stuff from main screen and search screen.  
-Please note that this will not reduce the traffic you used. This script will just remove things after browser finished loading page.  
-[![Install Script](/assets/Install_Button.png?raw=true "Install Script")](https://github.com/TetraTheta/tetrauserjs/raw/master/scripts/NAVER/NAVER_Compact.user.js)
-* `GitHub_WordWrap.user.js`  
-This script word wraps GitHub code pages.  
-[![Install Script](/assets/Install_Button.png?raw=true "Install Script")](https://github.com/TetraTheta/tetrauserjs/raw/master/scripts/GitHub/GitHub_WordWrap.user.js)
----
+## [OBSOLETE] [`DCinside_NoIMG_Recovery.user.js`](https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/DCinside_NoIMG_Recovery.user.js)
+
+Recently, DCinside got a DDOS attack, so many images don't load properly. This script will replace the 'No Image' error with the original image, which is always available.
+
+## [`GitHub_WordWrap.user.js`](https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/GitHub_WordWrap.user.js)
+
+GitHub doesn't provide word-wrap for their source code view. This script will add that to the code view screen.
+
+## [OBSOLETE] [`NAVER_Compact.user.js`](https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/NAVER_Compact.user.js)
+
+I think NAVER's website is bloated. So this script will remove various 'useless' items from NAVER's main page and search results.
+Please note that this script won't reduce the amount of traffic you use. This script will just 'hide'(or 'remove') things from your browser screen.
