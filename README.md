@@ -6,6 +6,10 @@ These are some UserScripts made by me. Click the name of the script to install.
 
 Recently, DCinside got a DDOS attack, so many images don't load properly. This script will replace the 'No Image' error with the original image, which is always available.
 
+## [`Force_Font_Apply.user.js](https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/Force_Font_Apply.user.js)
+
+This script will force-apply CSS to certain websites.
+
 ## [`GitHub_WordWrap.user.js`](https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/GitHub_WordWrap.user.js)
 
 GitHub doesn't provide word-wrap for their source code view. This script will add that to the code view screen.
