@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Force Apply Fonts
 // @namespace    https://github.com/TetraTheta
-// @version      0.1.1.221007
+// @version      0.1.2.221217
 // @description  Apply fonts for websites
 // @author       TetraTheta
 // @updateURL    https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/Force_Font_Apply.user.js
 // @downloadURL  https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/Force_Font_Apply.user.js
-// @match        *://*/*
+// @match        *://*.ruliweb.com/*
 // @exclude      *://*.pixiv.net/*
 // @grant        GM_addStyle
 // @run-at       document-idle
