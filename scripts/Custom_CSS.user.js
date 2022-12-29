@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom CSS
 // @namespace    https://github.com/TetraTheta
-// @version      0.2.0.221229
+// @version      0.2.1.221229
 // @description  Apply custom CSS for various sites
 // @author       TetraTheta
 // @updateURL    https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/Custom_CSS.user.js
@@ -31,17 +31,6 @@ function ruliweb() {
     .comment_wrapper .comment_view .comment_element .comment .text_wrapper .text { font-size: 14px !important; }
     /* Top Articles */
     .top_best.best_list .list_wrapper .item { font-size: 14px !important; }
-    /*  */
-    .max_width_outer {
-      margin-left: 0px;
-      margin-right: 0px;
-      min-width: 1100px;
-      width: 1100px;
-    }
-    #main .main_content_area {
-      margin-right: 0px;
-      display: inline;
-    }
   `;
   GM_addStyle(css);
 
