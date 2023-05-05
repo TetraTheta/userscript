@@ -12,7 +12,9 @@
 // ==/UserScript==
 
 GM_addStyle(`
-  .blob-code-inner, .markdown-body pre > code, .markdown-body .highlight > pre {
+  .blob-code-inner,
+  .markdown-body pre > code,
+  .markdown-body .highlight > pre {
     white-space: pre-wrap !important;
     word-break: break-all !important;
     overflow-wrap: break-word !important;
