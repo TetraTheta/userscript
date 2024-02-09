@@ -4,8 +4,8 @@
 // @version      0.1.2.190324
 // @description  Replacing 'No IMG' error and force-loading original image
 // @author       TetraTheta
-// @updateURL    https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/DCinside_NoIMG_Recovery.user.js
-// @downloadURL  https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/DCinside_NoIMG_Recovery.user.js
+// @updateURL    https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/DCInside%20NoIMG%20Recovery/DCinside-NoIMG-Recovery.user.js
+// @downloadURL  https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/DCInside%20NoIMG%20Recovery/DCinside-NoIMG-Recovery.user.js
 // @include      *.dcinside.co.kr/*
 // @include      *.dcinside.com/*
 // @run-at       document-start

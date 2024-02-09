@@ -4,8 +4,8 @@
 // @version      0.1.2.190324
 // @description  Compact NAVER main screen by removing stuff
 // @author       TetraTheta
-// @updateURL    https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/NAVER_Compact.user.js
-// @downloadURL  https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/NAVER_Compact.user.js
+// @updateURL    https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/NAVER%20Compact/NAVER-Compact.user.js
+// @downloadURL  https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/NAVER%20Compact/NAVER-Compact.user.js
 // @match        *://www.naver.com/*
 // @match        *://search.naver.com/*
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js

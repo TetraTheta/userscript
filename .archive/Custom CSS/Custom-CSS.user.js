@@ -4,8 +4,8 @@
 // @version      0.2.1.221229
 // @description  Apply custom CSS for various sites
 // @author       TetraTheta
-// @updateURL    https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/Custom_CSS.user.js
-// @downloadURL  https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/Custom_CSS.user.js
+// @updateURL    https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/Custom%20CSS/Custom-CSS.user.js
+// @downloadURL  https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/Custom%20CSS/Custom-CSS.user.js
 // @match        *://*.ruliweb.com/*
 // @grant        GM_addStyle
 // @run-at       document-idle

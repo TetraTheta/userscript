@@ -4,8 +4,8 @@
 // @version      0.1.0.221005
 // @description  Apply word wrap in GitHub code pages
 // @author       TetraTheta
-// @updateURL    https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/GitHub_WordWrap.user.js
-// @downloadURL  https://github.com/TetraTheta/TetraUserJS/raw/master/scripts/GitHub_WordWrap.user.js
+// @updateURL    https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/GitHub%20Word%20Wrap/GitHub-Word-Wrap.user.js
+// @downloadURL  https://github.com/TetraTheta/TetraUserScripts/raw/main/.archive/GitHub%20Word%20Wrap/GitHub-Word-Wrap.user.js
 // @match        *://github.com/*
 // @match        *://gist.github.com/*
 // @grant        GM_addStyle

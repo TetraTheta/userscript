@@ -8,8 +8,8 @@
 // @icon https://www.fandom.com/f2/assets/favicons/favicon-32x32.png?v=911c5c5b1b4cb66b20d97200726c1f13e56661f5
 // @grant GM_addStyle
 // @run-at document-start
-// @updateURL https://github.com/TetraTheta/TetraUserJS/raw/master/Fandom%20Garbage%20Cleanup/Fandom-Garbage-Cleanup.user.js
-// @downloadURL https://github.com/TetraTheta/TetraUserJS/raw/master/Fandom%20Garbage%20Cleanup/Fandom-Garbage-Cleanup.user.js
+// @updateURL https://github.com/TetraTheta/TetraUserScripts/raw/main/Fandom%20Garbage%20Cleanup/Fandom-Garbage-Cleanup.user.js
+// @downloadURL https://github.com/TetraTheta/TetraUserScripts/raw/main/Fandom%20Garbage%20Cleanup/Fandom-Garbage-Cleanup.user.js
 // ==/UserScript==
 
 (function() {
