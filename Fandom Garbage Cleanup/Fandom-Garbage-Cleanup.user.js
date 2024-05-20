@@ -12,7 +12,7 @@
 // @downloadURL https://github.com/TetraTheta/TetraUserScripts/raw/main/Fandom%20Garbage%20Cleanup/Fandom-Garbage-Cleanup.user.js
 // ==/UserScript==
 
-(function() {
+(function () {
   'use strict'
   // Don't run on iframes
   if (window.top != window.self) return
@@ -33,7 +33,7 @@
   }
 
   // Remove elements
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const targets = [
       '#discord-widget',
       '#mixed-content-footer',
@@ -51,7 +51,7 @@
       '.wikia-bar',
     ]
 
-    targets.forEach(function(t) {
+    targets.forEach(function (t) {
       let e;
       if (t.startsWith('#')) {
         console.log('Removing element with ID ' + t)
@@ -65,7 +65,7 @@
         console.log('Removing elements with Class ' + t)
         e = document.querySelectorAll(t)
         if (e.length > 0) {
-          Array.from(e).forEach(function(elem) {
+          Array.from(e).forEach(function (elem) {
             elem.parentNode.removeChild(elem)
           })
         } else {

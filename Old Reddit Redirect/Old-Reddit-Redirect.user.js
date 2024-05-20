@@ -12,7 +12,7 @@
 // @downloadURL https://github.com/TetraTheta/TetraUserScripts/raw/main/Old%20Reddit%20Redirect/Old-Reddit-Redirect.user.js
 // ==/UserScript==
 
-(function() {
+(function () {
   'use strict'
   function hasNewQueryString(url) { return url.includes('new=true') }
   function redirectToOldReddit() {
