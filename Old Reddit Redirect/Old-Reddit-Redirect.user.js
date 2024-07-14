@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Old Reddit Redirect
 // @namespace tetratheta
-// @version 1.0.0
+// @version 1.1.0
 // @description Conditional old reddit redirector
 // @author TetraTheta
 // @match https://*.reddit.com/*
@@ -14,7 +14,7 @@
 
 (function () {
   'use strict'
-  function hasNewQueryString(url) { return url.includes('new=true') }
+  function hasNewQueryString(url) { return url.includes('new=true') || url.includes('old=false') }
   function redirectToOldReddit() {
     if (window.location.hostname !== 'old.reddit.com' && !hasNewQueryString(window.location.href)) {
       window.location.replace('https://old.reddit.com' + window.location.pathname + window.location.search + window.location.hash)

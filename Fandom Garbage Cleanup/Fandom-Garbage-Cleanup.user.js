@@ -19,9 +19,9 @@
 
   // Inject style first
   const style = `
-  #discord-widget, #mixed-content-footer, #top_leaderboard, #WikiaBar, #WikiaBarWrapper, #WikiaRailWrapper { display:none; }
-  .ad-slot-placeholder, .bottom-ads-container, .global-explore-navigation, .global-footer__bottom, .global-navigation, .mcf-wrapper, .page-side-tool.content-size-toggle, .page__right-rail, .top-ads-container, .wds-global-footer, .wds-global-navigation__content-bar-left, .wikia-bar { display:none; }
-  div[itemprop="video"] { display:none; }
+  #discord-widget, #mixed-content-footer, #top_leaderboard, #WikiaBar, #WikiaBarWrapper, #WikiaRailWrapper { display: none; }
+  .ad-slot-placeholder, .bottom-ads-container, .global-explore-navigation, .global-footer__bottom, .global-navigation, .mcf-wrapper, .page-side-tool.content-size-toggle, .page__right-rail, .top-ads-container, .wds-global-footer, .wds-global-navigation__content-bar-left, .wikia-bar { display: none; }
+  div[itemprop="video"] { display: none; }
   #WikiaMainContent { width: 100%; }
   `
   if (typeof GM_addStyle !== 'undefined') {
