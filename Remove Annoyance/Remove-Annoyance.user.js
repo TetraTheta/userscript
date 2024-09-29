@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Remove Annoyance
 // @namespace tetratheta
-// @version 1.2.0
+// @version 1.3.0
 // @description Things I can't do with AdGuard filter
 // @author TetraTheta
 // @match *://*/*
@@ -56,6 +56,38 @@
         }
         return navigator.permissions.query(params)
       }
+    }
+  } else if (mhn('bbs.ruliweb.com')) {
+    const videoVolume = 0.1
+    const handleVideos = function() {
+      // Immediately set volume for existing videos
+      const videos = document.getElementsByTagName('video')
+      for (let i = 0; i < videos.length; i++) {
+        videos[i].volume = videoVolume
+      }
+      // Use MutationObserver to detect any new video elements added to the page
+      const observer = new MutationObserver(function (muts) {
+        muts.forEach(function (mut) {
+          mut.addedNodes.forEach(function (node) {
+            if (node.tagName === 'VIDEO') {
+              node.volume = videoVolume
+            }
+          })
+        })
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+      // Listen to 'playing' event
+      document.addEventListener('playing', function (evt) {
+        if (evt.target.tagName === 'VIDEO') {
+          evt.target.volume = videoVolume
+        }
+      }, true)
+    }
+    // Wait for DOM content to be loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', handleVideos)
+    } else {
+      handleVideos()
     }
   }
 })();
