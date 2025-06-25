@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.0.0
+// @version 1.0.1
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -35,32 +35,50 @@ function GM_addStyle(aCss) {
 
   GM_addStyle(style)
 
-  // Apply custom style to element
-  function jsStyle() {
-    document
-      .querySelectorAll('.novelbox table tbody tr td div')
-      .forEach((div) => {
-        if (div.textContent.trim() === '예약회차 있음') {
-          div.classList.add('semi-blur');
-          div.style.backgroundColor = '#e8e3f9';
-          div.style.color = '#000';
-        }
-      });
+  // Force remove elements because style alone doesn't work
+  document.addEventListener('DOMContentLoaded', function() {
+    const removals = [
+      '#slide-banner-box',
+      '#slide-banner-box-mobile',
+      '.mybook-sub-nav.s_inv',
+      '.s-logo',
+      'a.header-gift .red-dot',
+      'a[href$="/comic_main"]',
+      'a[href$="/contest_list"]',
+      'a[href$="/event/plus_free"]',
+      'a[href$="/plus"]',
+      'a[href$="/plus"]',
+      'a[href$="/top100"]',
+    ]
+
+    removals.forEach(function (t) {
+      console.log('Removing ' + t)
+      let e = document.querySelectorAll(t)
+      if (e.length > 0) {
+        Array.from(e).forEach(function (ele) {
+          ele.parentNode.removeChild(ele)
+        })
+      } else {
+        console.warn('No elements found for ' + t)
+      }
+    })
+  })
+
+  // Set style for Reservation Post
+  function reservationStyle() {
+    document.querySelectorAll('.novelbox table tbody tr td div').forEach((d) => {
+      if (d.textContent.trim() === '예약회차 있음') {
+        d.classList.add('semi-blur');
+        d.style.backgroundColor = '#e8e3f9';
+        d.style.color = '#000';
+      }
+    })
   }
-  jsStyle();
+  reservationStyle();
 
-  document.addEventListener('DOMContentLoaded', jsStyle);
-  const observer = new MutationObserver(() => jsStyle());
+  document.addEventListener('DOMContentLoaded', reservationStyle);
+  const observer = new MutationObserver(() => reservationStyle());
   observer.observe(document.documentElement, { childList: true, subtree: true });
-
-  // Force remove elements that aren't removed by CSS
-  document.body.addEventListener('DOMContentLoaded', function () {
-    setTimeout(function () {
-      document.body
-        .querySelectorAll('#slide-banner-box')
-        .forEach((e) => e.remove());
-    }, 100);
-  });
 
   // Hide Ads
   const plus_free = '/event/plus_free';
@@ -84,18 +102,11 @@ function GM_addStyle(aCss) {
   );
 
   // Use Page navigation
-  document.addEventListener('DOMContentLoaded', () =>
-    window.localStorage.setItem('viewer_paging', 1)
-  );
+  document.addEventListener('DOMContentLoaded', () => window.localStorage.setItem('viewer_paging', 1));
   window.localStorage.setItem('viewer_paging', 1);
 
   // Apply font via HTML modification
   document.addEventListener('DOMContentLoaded', () => {
-    document
-      .getElementsByTagName('body')[0]
-      .setAttribute(
-        'style',
-        "'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;"
-      );
+    document.getElementsByTagName('body')[0].setAttribute('style', "font-family: 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;");
   });
 })();

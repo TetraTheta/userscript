@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Fandom Garbage Cleaner
 // @namespace tetratheta
-// @version 1.0.0
+// @version 1.0.1
 // @description I hate Fandom's garbage elements
 // @author TetraTheta
 // @icon https://www.fandom.com/f2/assets/favicons/favicon-32x32.png?v=911c5c5b1b4cb66b20d97200726c1f13e56661f5
@@ -68,11 +68,11 @@ function GM_addStyle(aCss) {
       let e;
       if (t.startsWith('#')) {
         console.log('Removing element with ID ' + t)
-        e = document.getElementById(t.substr(1))
+        e = document.getElementById(t.substring(1))
         if (e) {
           e.parentNode.removeChild(e)
         } else {
-          console.warn('Element with ID ' + t + ' not found');
+          console.warn('Element with ID ' + t + ' not found')
         }
       } else if (t.startsWith('.')) {
         console.log('Removing elements with Class ' + t)
@@ -82,7 +82,7 @@ function GM_addStyle(aCss) {
             elem.parentNode.removeChild(elem)
           })
         } else {
-          console.warn('No elements found with class ' + t);
+          console.warn('No elements found with class ' + t)
         }
       }
     })
@@ -94,4 +94,4 @@ function GM_addStyle(aCss) {
       ae[i].setAttribute('preload', 'none')
     }
   })
-})();
+})()
