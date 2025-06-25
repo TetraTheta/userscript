@@ -4,16 +4,18 @@
 // @version 1.1.0
 // @description Conditional old reddit redirector
 // @author TetraTheta
-// @match https://*.reddit.com/*
 // @icon https://reddit.com/favicon.ico
 // @grant none
+// @match *://*.reddit.com/*
 // @run-at document-start
-// @updateURL https://github.com/TetraTheta/TetraUserScripts/raw/main/Old%20Reddit%20Redirect/Old-Reddit-Redirect.user.js
-// @downloadURL https://github.com/TetraTheta/TetraUserScripts/raw/main/Old%20Reddit%20Redirect/Old-Reddit-Redirect.user.js
+// @noframes
+// @updateURL https://tetratheta.github.io/userscript/old-reddit-redirect.user.js
+// @downloadURL https://tetratheta.github.io/userscript/old-reddit-redirect.user.js
 // ==/UserScript==
 
+'use strict'
+
 (function () {
-  'use strict'
   function hasNewQueryString(url) { return url.includes('new=true') || url.includes('old=false') }
   function redirectToOldReddit() {
     if (window.location.hostname !== 'old.reddit.com' && !hasNewQueryString(window.location.href)) {
