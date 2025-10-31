@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.0.1
+// @version 1.1.0
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -13,6 +13,8 @@
 // ==/UserScript==
 
 'use strict'
+
+
 
 function GM_addStyle(aCss) {
   let head = document.getElementsByTagName('head')[0]
@@ -26,87 +28,93 @@ function GM_addStyle(aCss) {
   return null
 }
 
-(function () {
-  const style = `body, body.collapse-menu.dark-mode, div#app { font-family: 'Apple SD Gothic Neo', 'AppleSDGothicNeo', 'AppleSDGothicNeoR00', 'Pretendard', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important; }
-  a[href$='/comic_main'], a[href$='/contest_list'], a[href$='/event/plus_free'], a[href$='/plus'], a[href$='/plus'], a[href$='/top100'] { display: none; }
-  #slide-banner-box, #slide-banner-box-mobile, .mybook-sub-nav.s_inv, .s-logo, a.header-gift .red-dot { display: none; }
-  div.semi-blur { background-color: #e8e3f9; color: #000; }
-  `
+(() => {
+  const is_premium = true
+  const font = "font-family: 'Spoqa Han Sans Neo', 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;"
+  const plus_free_path = '/event/plus_free'
 
-  GM_addStyle(style)
-
-  // Force remove elements because style alone doesn't work
-  document.addEventListener('DOMContentLoaded', function() {
-    const removals = [
-      '#slide-banner-box',
-      '#slide-banner-box-mobile',
-      '.mybook-sub-nav.s_inv',
-      '.s-logo',
-      'a.header-gift .red-dot',
-      'a[href$="/comic_main"]',
-      'a[href$="/contest_list"]',
-      'a[href$="/event/plus_free"]',
-      'a[href$="/plus"]',
-      'a[href$="/plus"]',
-      'a[href$="/top100"]',
-    ]
-
-    removals.forEach(function (t) {
-      console.log('Removing ' + t)
-      let e = document.querySelectorAll(t)
-      if (e.length > 0) {
-        Array.from(e).forEach(function (ele) {
-          ele.parentNode.removeChild(ele)
-        })
-      } else {
-        console.warn('No elements found for ' + t)
+  const addStyle = css => {
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+  const removeElements = selectors => {
+    for (const selector of selectors) {
+      const elements = document.querySelectorAll(selector)
+      if (elements.length == 0) {
+        console.log(`No elements found for ${selector}`)
+        continue
       }
-    })
-  })
+      for (const el of elements) el.remove()
+      console.log(`Remove ${selector}`)
+    }
+  }
 
-  // Set style for Reservation Post
-  function reservationStyle() {
-    document.querySelectorAll('.novelbox table tbody tr td div').forEach((d) => {
-      if (d.textContent.trim() === '예약회차 있음') {
-        d.classList.add('semi-blur');
-        d.style.backgroundColor = '#e8e3f9';
-        d.style.color = '#000';
+  const css_general = `
+    body, body.collapse-menu.dark-mode, div#app { ${font} }
+    #slide-banner-box, #slide-banner-box-mobile, .mybook-sub-nav.s_inv, .s-logo, a.header-gift .red-dot { display: none; }
+    div.semi-blur { background-color: #e8e3f9; color: #000; }
+  `
+  const css_no_plus = `
+    a[href$='/comic_main'],
+    a[href$='/contest_list'],
+    a[href$='/event/plus_free'],
+    a[href$='/plus'],
+    a[href$='/top100'] { display: none; }
+  `
+  addStyle(css_general)
+  if (!is_premium) addStyle(css_no_plus)
+
+  const removals_general = [
+    '#slide-banner-box',
+    '#slide-banner-box-mobile',
+    '.mybook-sub-nav.s_inv',
+    '.s-logo',
+    'a.header-gift .red-dot',
+  ]
+  const removals_no_plus = [
+    'a[href$="/comic_main"]',
+    'a[href$="/contest_list"]',
+    'a[href$="/event/plus_free"]',
+    'a[href$="/plus"]',
+    'a[href$="/top100"]',
+  ]
+
+  const applyReservationStyle = () => {
+    document.querySelectorAll('.novelbox table tbody tr td div').forEach(div => {
+      if (div.textContent.trim() === '예약회차 있음') {
+        div.classList.add('semi-blur')
+        div.style.backgroundColor = '#e8e3f9';
+        div.style.color = '#000';
       }
     })
   }
-  reservationStyle();
 
-  document.addEventListener('DOMContentLoaded', reservationStyle);
-  const observer = new MutationObserver(() => reservationStyle());
-  observer.observe(document.documentElement, { childList: true, subtree: true });
+  const handleAdClick = evt => {
+    const el = evt.target
+    if (!el.href && !el.onclick) return
+    const hrefMatch = el.href?.endsWith(plus_free_path)
+    const onClickMatch = el.onclick?.toString().includes(plus_free_path)
+    const pathMatch = window.location.pathname.endsWith(plus_free_path)
 
-  // Hide Ads
-  const plus_free = '/event/plus_free';
-  document.body.addEventListener(
-    'click',
-    (evt) => {
-      const elem = evt.target;
-      if (elem.href && elem.href.endsWith(plus_free)) {
-        evt.preventDefault();
-        elem.style.display = 'none';
-      }
-      if (elem.onclick && elem.onclick.toString().endsWith(plus_free)) {
-        evt.preventDefault();
-        elem.style.display = 'none';
-      }
-      if (window.location.pathname.endsWith(plus_free)) {
-        evt.preventDefault();
-      }
-    },
-    true
-  );
+    if (hrefMatch || onClickMatch || pathMatch) {
+      evt.preventDefault()
+      el.style.display = 'none'
+      console.log('Blocked ad link:', el)
+    }
+  }
 
-  // Use Page navigation
-  document.addEventListener('DOMContentLoaded', () => window.localStorage.setItem('viewer_paging', 1));
-  window.localStorage.setItem('viewer_paging', 1);
+  const onReady = () => {
+    removeElements(removals_general)
+    if (!is_premium) removeElements(removals_no_plus)
+    applyReservationStyle()
+    document.body.addEventListener('click', handleAdClick, true)
+    localStorage.setItem('viewer_paging', 1)
+    document.body.style.cssText += font;
+  }
 
-  // Apply font via HTML modification
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementsByTagName('body')[0].setAttribute('style', "font-family: 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;");
-  });
+  const observer = new MutationObserver(applyReservationStyle)
+  observer.observe(document.documentElement, { childList: true, subtree: true })
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady)
+  else onReady()
 })();
