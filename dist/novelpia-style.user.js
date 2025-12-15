@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.2.1
+// @version 1.2.2
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -53,6 +53,7 @@ function GM_addStyle(aCss) {
     #slide-banner-box, #slide-banner-box-mobile, .mybook-sub-nav.s_inv, .s-logo, a.header-gift .red-dot { display: none; }
     div.semi-blur { background-color: #e8e3f9; color: #000; }
     div.mybook-tab-container :nth-child(2), div.mybook-tab-container :nth-child(3) { display: none; }
+    div.mybook-tab-container-m :nth-child(2), div.mybook-tab-container-m :nth-child(3) { display: none; }
   `
   const css_no_plus = `
     a[href$='/comic_main'],
