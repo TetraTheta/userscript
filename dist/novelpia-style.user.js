@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.2.2
+// @version 1.3.0
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -117,4 +117,56 @@ function GM_addStyle(aCss) {
   observer.observe(document.documentElement, { childList: true, subtree: true })
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady)
   else onReady()
+
+
+  let activeRequests = 0;
+  const bar = document.createElement('div');
+  Object.assign(bar.style, {
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    width: '0%',
+    height: '3px',
+    backgroundColor: '#007bff',
+    zIndex: '99999',
+    transition: 'width 0.3s ease, opacity 0.3s ease',
+    pointerEvents: 'none'
+  });
+  document.documentElement.appendChild(bar);
+
+  const updateBar = () => {
+    if (activeRequests <= 0) {
+      activeRequests = 0;
+      bar.style.width = '100%';
+      setTimeout(() => {
+        bar.style.opacity = '0';
+        bar.style.width = '0%';
+      }, 200);
+    } else {
+      bar.style.opacity = '1';
+      let progress = Math.min(90, 10 + (activeRequests * 15));
+      bar.style.width = progress + '%';
+    }
+  }
+
+  const originalFetch = window.fetch;
+  window.fetch = function(...args) {
+    activeRequests++;
+    updateBar();
+    return originalFetch(...args).finally(() => {
+      activeRequests--;
+      updateBar();
+    });
+  };
+
+  const originalSend = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send = function(...args) {
+    activeRequests++;
+    updateBar();
+    this.addEventListener('loadend', () => {
+      activeRequests--;
+      updateBar();
+    }, { once: true });
+    return originalSend.apply(this, args);
+  };
 })();
