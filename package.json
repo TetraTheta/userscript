@@ -1,0 +1,23 @@
+{
+  "name": "userscript",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "preinstall": "npx only-allow pnpm",
+    "update": "pnpm dlx npm-check-updates",
+    "upgrade": "pnpm dlx npm-check-updates -u && pnpm install"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.10.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.6"
+  },
+  "packageManager": "pnpm@12.3.4",
+  "engines": {
+    "npm": "Use pnpm instead of npm."
+  }
+}

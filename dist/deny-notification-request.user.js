@@ -16,15 +16,15 @@
 // ==/UserScript==
 
 (() => {
-  "use strict";
+  'use strict';
 
   Notification.requestPermission = () => {
-    return Promise.resolve("denied");
+    return Promise.resolve('denied');
   };
   if (navigator.permissions) {
     navigator.permissions.query = (params) => {
-      if (params.name === "notifications") {
-        return Promise.resolve({ state: "denied" });
+      if (params.name === 'notifications') {
+        return Promise.resolve({ state: 'denied' });
       }
       return navigator.permissions.query(params);
     };

@@ -13,12 +13,12 @@
 // ==/UserScript==
 
 function GM_addStyle(aCss) {
-  "use strict";
+  'use strict';
 
-  let head = document.getElementsByTagName("head")[0];
+  let head = document.getElementsByTagName('head')[0];
   if (head) {
-    let style = document.createElement("style");
-    style.setAttribute("type", "text/css");
+    let style = document.createElement('style');
+    style.setAttribute('type', 'text/css');
     style.textContent = aCss;
     head.appendChild(style);
     return style;
@@ -27,15 +27,15 @@ function GM_addStyle(aCss) {
 }
 
 (() => {
-  "use strict";
+  'use strict';
 
   const is_premium = true;
   const font =
-    "font-family: 'Spoqa Han Sans Neo', 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;";
-  const plus_free_path = "/event/plus_free";
+    "font-family: 'Apple SD Gothic Neo', 'Pretendard', 'Spoqa Han Sans Neo', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;";
+  const plus_free_path = '/event/plus_free';
 
   const addStyle = (css) => {
-    const style = document.createElement("style");
+    const style = document.createElement('style');
     style.textContent = css;
     document.head.appendChild(style);
   };
@@ -52,7 +52,7 @@ function GM_addStyle(aCss) {
   };
 
   const css_general = `
-    body, body.collapse-menu.dark-mode, div#app { ${font} }
+    body, body.collapse-menu.dark-mode, div#app, div#novel_drawing_page { ${font} }
     #slide-banner-box, #slide-banner-box-mobile, .mybook-sub-nav.s_inv, .s-logo, a.header-gift .red-dot { display: none; }
     div.semi-blur { background-color: #e8e3f9; color: #000; }
     div.mybook-tab-container :nth-child(2), div.mybook-tab-container :nth-child(3) { display: none; }
@@ -68,13 +68,7 @@ function GM_addStyle(aCss) {
   addStyle(css_general);
   if (!is_premium) addStyle(css_no_plus);
 
-  const removals_general = [
-    "#slide-banner-box",
-    "#slide-banner-box-mobile",
-    ".mybook-sub-nav.s_inv",
-    ".s-logo",
-    "a.header-gift .red-dot",
-  ];
+  const removals_general = ['#slide-banner-box', '#slide-banner-box-mobile', '.mybook-sub-nav.s_inv', '.s-logo', 'a.header-gift .red-dot'];
   const removals_no_plus = [
     'a[href$="/comic_main"]',
     'a[href$="/contest_list"]',
@@ -84,11 +78,11 @@ function GM_addStyle(aCss) {
   ];
 
   const applyReservationStyle = () => {
-    document.querySelectorAll(".novelbox table tbody tr td div").forEach((div) => {
-      if (div.textContent.trim() === "예약회차 있음") {
-        div.classList.add("semi-blur");
-        div.style.backgroundColor = "#e8e3f9";
-        div.style.color = "#000";
+    document.querySelectorAll('.novelbox table tbody tr td div').forEach((div) => {
+      if (div.textContent.trim() === '예약회차 있음') {
+        div.classList.add('semi-blur');
+        div.style.backgroundColor = '#e8e3f9';
+        div.style.color = '#000';
       }
     });
   };
@@ -102,8 +96,8 @@ function GM_addStyle(aCss) {
 
     if (hrefMatch || onClickMatch || pathMatch) {
       evt.preventDefault();
-      el.style.display = "none";
-      console.log("Blocked ad link:", el);
+      el.style.display = 'none';
+      console.log('Blocked ad link:', el);
     }
   };
 
@@ -111,54 +105,56 @@ function GM_addStyle(aCss) {
     removeElements(removals_general);
     if (!is_premium) removeElements(removals_no_plus);
     applyReservationStyle();
-    document.body.addEventListener("click", handleAdClick, true);
-    localStorage.setItem("viewer_paging", 1);
+    document.body.addEventListener('click', handleAdClick, true);
+    localStorage.setItem('viewer_paging', 1);
     document.body.style.cssText += font;
   };
 
   const observer = new MutationObserver(applyReservationStyle);
   observer.observe(document.documentElement, { childList: true, subtree: true });
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", onReady);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
   else onReady();
 
   let activeRequests = 0;
-  const bar = document.createElement("div");
+  const bar = document.createElement('div');
   Object.assign(bar.style, {
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "0%",
-    height: "3px",
-    backgroundColor: "#007bff",
-    zIndex: "99999",
-    transition: "width 0.3s ease, opacity 0.3s ease",
-    pointerEvents: "none",
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    width: '0%',
+    height: '3px',
+    backgroundColor: '#007bff',
+    zIndex: '99999',
+    transition: 'width 0.3s ease, opacity 0.3s ease',
+    pointerEvents: 'none',
   });
   document.documentElement.appendChild(bar);
 
   const updateBar = () => {
     if (activeRequests <= 0) {
       activeRequests = 0;
-      bar.style.width = "100%";
+      bar.style.width = '100%';
       setTimeout(() => {
-        bar.style.opacity = "0";
-        bar.style.width = "0%";
+        bar.style.opacity = '0';
+        bar.style.width = '0%';
       }, 200);
     } else {
-      bar.style.opacity = "1";
+      bar.style.opacity = '1';
       let progress = Math.min(90, 10 + activeRequests * 15);
-      bar.style.width = progress + "%";
+      bar.style.width = progress + '%';
     }
   };
 
   const originalFetch = window.fetch;
-  window.fetch = function (...args) {
+  window.fetch = async function (...args) {
     activeRequests++;
     updateBar();
-    return originalFetch(...args).finally(() => {
+    try {
+      return await originalFetch(...args);
+    } finally {
       activeRequests--;
       updateBar();
-    });
+    }
   };
 
   const originalSend = XMLHttpRequest.prototype.send;
@@ -166,7 +162,7 @@ function GM_addStyle(aCss) {
     activeRequests++;
     updateBar();
     this.addEventListener(
-      "loadend",
+      'loadend',
       () => {
         activeRequests--;
         updateBar();

@@ -13,36 +13,32 @@
 // ==/UserScript==
 
 (() => {
-  "use strict";
+  'use strict';
 
   const videoVolume = 0.1;
 
   function handleVideos() {
-    document.getElementsByTagName("VIDEO").forEach((v) => (v.volume = videoVolume));
+    document.getElementsByTagName('VIDEO').forEach((v) => (v.volume = videoVolume));
     const observer = new MutationObserver((muts) => {
       muts.forEach((mut) => {
         mut.addedNodes.forEach((node) => {
-          if (node.tagName === "VIDEO") {
-            node.volume = videoVolume;
-          }
+          if (node.tagName === 'VIDEO') node.volume = videoVolume;
         });
       });
     });
     observer.observe(document.body, { childList: true, subtree: true });
     document.addEventListener(
-      "playing",
+      'playing',
       (evt) => {
-        if (evt.target.tagName === "VIDEO") {
-          evt.target.volume = videoVolume;
-        }
+        if (evt.target.tagName === 'VIDEO') evt.target.volume = videoVolume;
       },
       true,
     );
   }
 
   // Wait for DOM content to be loaded
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", handleVideos);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', handleVideos);
   } else {
     handleVideos();
   }

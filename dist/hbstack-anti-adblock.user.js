@@ -13,12 +13,12 @@
 // ==/UserScript==
 
 (() => {
-  "use strict";
+  'use strict';
 
-  localStorage.setItem("hb-anti-adblock-reminded-at", Date.now().toString());
-  const e = document.querySelector(".hb-anti-adblock");
+  localStorage.setItem('hb-anti-adblock-reminded-at', Date.now().toString());
+  const e = document.querySelector('.hb-anti-adblock');
   if (e) {
-    e.style.display = "none";
+    e.style.display = 'none';
     e.hide();
   }
 })();

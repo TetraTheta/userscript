@@ -13,12 +13,12 @@
 // ==/UserScript==
 
 function GM_addStyle(aCss) {
-  "use strict";
+  'use strict';
 
-  let head = document.getElementsByTagName("head")[0];
+  let head = document.getElementsByTagName('head')[0];
   if (head) {
-    let style = document.createElement("style");
-    style.setAttribute("type", "text/css");
+    let style = document.createElement('style');
+    style.setAttribute('type', 'text/css');
     style.textContent = aCss;
     head.appendChild(style);
     return style;
@@ -27,15 +27,14 @@ function GM_addStyle(aCss) {
 }
 
 (() => {
-  "use strict";
+  'use strict';
 
-  const regular_font =
-    "'Pretendard', 'Spoqa Han Sans Neo', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;";
+  const regular_font = "'Pretendard', 'Spoqa Han Sans Neo', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;";
   const monospace_font =
     "'goorm Sans Code', 'D2Coding', 'Cascadia Code PL', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace !important;";
 
   const addStyle = (css) => {
-    const style = document.createElement("style");
+    const style = document.createElement('style');
     style.textContent = css;
     document.head.appendChild(style);
   };
@@ -62,6 +61,6 @@ function GM_addStyle(aCss) {
 
   const observer = new MutationObserver(applyReservationStyle);
   observer.observe(document.documentElement, { childList: true, subtree: true });
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", onReady);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
   else onReady();
 })();

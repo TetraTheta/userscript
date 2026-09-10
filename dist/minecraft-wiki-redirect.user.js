@@ -14,7 +14,7 @@
 // ==/UserScript==
 
 (() => {
-  "use strict";
+  'use strict';
 
-  location.replace(location.href.replace("fandom.com", "wiki"));
+  location.replace(location.href.replace('fandom.com', 'wiki'));
 })();

@@ -14,12 +14,12 @@
 // ==/UserScript==
 
 function GM_addStyle(aCss) {
-  "use strict";
+  'use strict';
 
-  let head = document.getElementsByTagName("head")[0];
+  let head = document.getElementsByTagName('head')[0];
   if (head) {
-    let style = document.createElement("style");
-    style.setAttribute("type", "text/css");
+    let style = document.createElement('style');
+    style.setAttribute('type', 'text/css');
     style.textContent = aCss;
     head.appendChild(style);
     return style;
@@ -28,7 +28,7 @@ function GM_addStyle(aCss) {
 }
 
 (() => {
-  "use strict";
+  'use strict';
 
   // Don't run on iframes
   if (window.top != window.self) return;
