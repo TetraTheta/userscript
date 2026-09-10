@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name GitHub Style
 // @namespace tetratheta
-// @version 1.0.1
+// @version 1.0.2
 // @description Customized GitHub
 // @author TetraTheta
 // @grant none
@@ -33,12 +33,6 @@ function GM_addStyle(aCss) {
   const monospace_font =
     "'goorm Sans Code', 'D2Coding', 'Cascadia Code PL', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace !important;";
 
-  const addStyle = (css) => {
-    const style = document.createElement('style');
-    style.textContent = css;
-    document.head.appendChild(style);
-  };
-
   const css_general = `
     :root {
       --fontStack-monospace: ${monospace_font};
@@ -53,14 +47,12 @@ function GM_addStyle(aCss) {
     }
   `;
 
-  addStyle(css_general);
+  GM_addStyle(css_general);
 
   const onReady = () => {
-    document.body.style.cssText += font;
+    document.body.style.cssText += regular_font;
   };
 
-  const observer = new MutationObserver(applyReservationStyle);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
   else onReady();
 })();
