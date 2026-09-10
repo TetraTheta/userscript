@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.3.1
+// @version 1.4.0
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -115,6 +115,21 @@ function GM_removeElements(selectors) {
     body, body.collapse-menu.dark-mode, div#app, div#novel_drawing_page { ${font} }
   `;
 
+  // ##############
+  // # Head Title #
+  // ##############
+
+  const applyHeadTitle = () => {
+    if (!window.location.href.startsWith('https://novelpia.com/viewer/')) return;
+
+    const en = document.querySelector('div.menu-title-wrapper span.menu-top-tag')?.textContent?.trim();
+    const et = document.querySelector('div.menu-title-wrapper div.menu-top-title')?.textContent?.trim();
+    if (!en || !et) return;
+
+    const title = `${en} - ${et}`;
+    if (document.title !== title) document.title = title;
+  };
+
   // ########################
   // # Network Progress Bar #
   // ########################
@@ -195,7 +210,12 @@ function GM_removeElements(selectors) {
     });
   };
 
-  const observer = new MutationObserver(applyReservationStyle);
+  const applyDynamicChanges = () => {
+    applyHeadTitle();
+    applyReservationStyle();
+  };
+
+  const observer = new MutationObserver(applyDynamicChanges);
 
   // ###################
   // # Viewer Settings #
@@ -217,7 +237,7 @@ function GM_removeElements(selectors) {
   const onReady = () => {
     GM_removeElements(removals_general);
     if (!is_premium) GM_removeElements(removals_no_plus);
-    applyReservationStyle();
+    applyDynamicChanges();
     applyViewerSettings();
     document.body.addEventListener('click', handleAdClick, true);
     document.body.style.cssText += font;
