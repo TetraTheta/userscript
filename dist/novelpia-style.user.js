@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.4.0
+// @version 1.5.0
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -50,6 +50,7 @@ function GM_removeElements(selectors) {
   // ##########
 
   // Set this to 'true' if you are subscribing Plus plan
+  const draw_loading_bar = false;
   const is_premium = true;
 
   // #######################
@@ -134,63 +135,65 @@ function GM_removeElements(selectors) {
   // # Network Progress Bar #
   // ########################
 
-  let activeRequests = 0;
-  const bar = document.createElement('div');
-  Object.assign(bar.style, {
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: '0%',
-    height: '3px',
-    backgroundColor: '#007bff',
-    zIndex: '99999',
-    transition: 'width 0.3s ease, opacity 0.3s ease',
-    pointerEvents: 'none',
-  });
-  document.documentElement.appendChild(bar);
+  if (draw_loading_bar) {
+    let activeRequests = 0;
+    const bar = document.createElement('div');
+    Object.assign(bar.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: '0%',
+      height: '3px',
+      backgroundColor: '#007bff',
+      zIndex: '99999',
+      transition: 'width 0.3s ease, opacity 0.3s ease',
+      pointerEvents: 'none',
+    });
+    document.documentElement.appendChild(bar);
 
-  const originalFetch = window.fetch;
-  const originalSend = XMLHttpRequest.prototype.send;
+    const originalFetch = window.fetch;
+    const originalSend = XMLHttpRequest.prototype.send;
 
-  const updateBar = () => {
-    if (activeRequests <= 0) {
-      activeRequests = 0;
-      bar.style.width = '100%';
-      setTimeout(() => {
-        bar.style.opacity = '0';
-        bar.style.width = '0%';
-      }, 200);
-    } else {
-      bar.style.opacity = '1';
-      let progress = Math.min(90, 10 + activeRequests * 15);
-      bar.style.width = progress + '%';
-    }
-  };
+    const updateBar = () => {
+      if (activeRequests <= 0) {
+        activeRequests = 0;
+        bar.style.width = '100%';
+        setTimeout(() => {
+          bar.style.opacity = '0';
+          bar.style.width = '0%';
+        }, 200);
+      } else {
+        bar.style.opacity = '1';
+        let progress = Math.min(90, 10 + activeRequests * 15);
+        bar.style.width = progress + '%';
+      }
+    };
 
-  window.fetch = async function (...args) {
-    activeRequests++;
-    updateBar();
-    try {
-      return await originalFetch(...args);
-    } finally {
-      activeRequests--;
+    window.fetch = async function (...args) {
+      activeRequests++;
       updateBar();
-    }
-  };
-
-  XMLHttpRequest.prototype.send = function (...args) {
-    activeRequests++;
-    updateBar();
-    this.addEventListener(
-      'loadend',
-      () => {
+      try {
+        return await originalFetch(...args);
+      } finally {
         activeRequests--;
         updateBar();
-      },
-      { once: true },
-    );
-    return originalSend.apply(this, args);
-  };
+      }
+    };
+
+    XMLHttpRequest.prototype.send = function (...args) {
+      activeRequests++;
+      updateBar();
+      this.addEventListener(
+        'loadend',
+        () => {
+          activeRequests--;
+          updateBar();
+        },
+        { once: true },
+      );
+      return originalSend.apply(this, args);
+    };
+  }
 
   // ########################
   // # Reservation Chapters #
