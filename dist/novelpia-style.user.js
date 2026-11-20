@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.5.0
+// @version 1.6.0
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -12,109 +12,151 @@
 // @downloadURL https://tetratheta.github.io/userscript/novelpia-style.user.js
 // ==/UserScript==
 
+'use strict';
+
 // ####################
 // # Shared Utilities #
 // ####################
 
-function GM_addStyle(aCss) {
-  'use strict';
-
-  let head = document.getElementsByTagName('head')[0];
-  if (head) {
-    let style = document.createElement('style');
-    style.setAttribute('type', 'text/css');
-    style.textContent = aCss;
-    head.appendChild(style);
-    return style;
-  }
-  return null;
+function addStyle(css) {
+  const style = document.createElement('style');
+  style.textContent = css;
+  (document.head ?? document.documentElement).appendChild(style);
+  return style;
 }
 
-function GM_removeElements(selectors) {
-  for (const selector of selectors) {
-    const elements = document.querySelectorAll(selector);
-    if (elements.length == 0) {
-      console.log(`No elements found for ${selector}`);
-      continue;
-    }
-    for (const el of elements) el.remove();
-    console.log(`Remove ${selector}`);
+function removeElements(selector) {
+  const elements = document.querySelectorAll(selector);
+  if (elements.length === 0) {
+    console.log(`No elements found for ${selector}`);
+    return;
   }
+  for (const el of elements) el.remove();
+  console.log(`Removed ${elements.length} element(s) for ${selector}`);
+}
+
+function setCookie(key, value, expires = 30, path = '/', domain = 'novelpia.com', secure = false, sameSite = 'Lax') {
+  const isDelete = value === null;
+  let cookieStr = `${encodeURIComponent(key)}=${isDelete ? '' : encodeURIComponent(value)}`;
+  // expires
+  if (isDelete) {
+    cookieStr += `; expires=${new Date(0).toUTCString()}`;
+  } else if (typeof expires === 'number') {
+    const expiresDate = new Date(Date.now() + expires * 86400000);
+    cookieStr += `; expires=${expiresDate.toUTCString()}`;
+  } else if (expires instanceof Date) {
+    cookieStr += `; expires=${expires.toUTCString()}`;
+  }
+  // path
+  if (path) cookieStr += `; path=${path}`;
+  // domain
+  if (domain) cookieStr += `; domain=${domain}`;
+  // sameSite
+  if (sameSite) cookieStr += `; SameSite=${sameSite}`;
+  // secure
+  if (secure) cookieStr += '; Secure';
+  //
+  document.cookie = cookieStr;
 }
 
 (() => {
-  'use strict';
-
   // ##########
   // # Config #
   // ##########
 
-  // Set this to 'true' if you are subscribing Plus plan
-  const draw_loading_bar = false;
-  const is_premium = true;
-
-  // #######################
-  // # Ad Link Click Guard #
-  // #######################
-
-  const plus_free_path = '/event/plus_free';
-
-  const handleAdClick = (evt) => {
-    const el = evt.target;
-    if (!el.href && !el.onclick) return;
-    const hrefMatch = el.href?.endsWith(plus_free_path);
-    const onClickMatch = el.onclick?.toString().includes(plus_free_path);
-    const pathMatch = window.location.pathname.endsWith(plus_free_path);
-
-    if (hrefMatch || onClickMatch || pathMatch) {
-      evt.preventDefault();
-      el.style.display = 'none';
-      console.log('Blocked ad link:', el);
-    }
-  };
-
-  // ############################
-  // # Element Hiding - General #
-  // ############################
-
-  const css_general = `
-    #slide-banner-box, #slide-banner-box-mobile, .mybook-sub-nav.s_inv, .s-logo, a.header-gift .red-dot { display: none; }
-    div.mybook-tab-container :nth-child(2), div.mybook-tab-container :nth-child(3) { display: none; }
-    div.mybook-tab-container-m :nth-child(2), div.mybook-tab-container-m :nth-child(3) { display: none; }
-  `;
-
-  const removals_general = ['#slide-banner-box', '#slide-banner-box-mobile', '.mybook-sub-nav.s_inv', '.s-logo', 'a.header-gift .red-dot'];
-
-  // #############################
-  // # Element Hiding - Non-Plus #
-  // #############################
-
-  const css_no_plus = `
-    a[href$='/comic_main'],
-    a[href$='/contest_list'],
-    a[href$='/event/plus_free'],
-    a[href$='/plus'],
-    a[href$='/top100'] { display: none; }
-  `;
-
-  const removals_no_plus = [
+  // Remove annoyance
+  const removeAnnoyances = true;
+  const annoyanceSelectors = [
+    '#slide-banner-box',
+    '#slide-banner-box-mobile',
+    '.mybook-sub-nav.s_inv',
+    '.s-logo',
+    'a.header-gift .red-dot',
+    'div.mybook-tab-container :nth-child(2)',
+    'div.mybook-tab-container :nth-child(3)',
+    'div.mybook-tab-container-m :nth-child(2)',
+    'div.mybook-tab-container-m :nth-child(3)',
+  ];
+  // Remove upsells (Comic, NovelChat, Plus)
+  const removeUpsells = true;
+  const upsellSelectors = [
     'a[href$="/comic_main"]',
-    'a[href$="/contest_list"]',
     'a[href$="/event/plus_free"]',
     'a[href$="/plus"]',
-    'a[href$="/top100"]',
+    'a[href$="/plus_shop"]',
+    'a[href^="https://chatple.novelpia.com/"]',
   ];
+  // Set website style (Cookie)
+  const setWebsiteStyle = true;
+  const websiteStyle = {
+    // do not sort this
+    novelchanCursor: false, // CURSOR (1/)
+    darkWebsite: true, // DARKMODE_S (1/)
+    darkViewer: true, // DARKMODE (1/)
+    pinTop100: true, // TOP100_ALL (1/)
+    blockCoverThumbnail: false, // COVER_VIEW (OFF/ON)
+    blockOpenTheDoor: false, // OPEN_THE_DOOR (OFF/ON)
+    blockWriterReview: false, // BLOCK_WRITER_REVIEWS (ON/OFF)
+    blockIllustration: false, // BLOCK_ILLUSTRATION (ON/OFF)
+    includeParodyInRanking: true, // BLOCK_PARODY (ON/OFF) // WTF?
+  };
+  // Set viewer style (LocalStorage)
+  const setViewerStyle = true;
+  const viewerStyle = {
+    viewer_bg: '#000000',
+    viewer_color: '#999999',
+    // viewer_float: 'on',
+    // viewer_float_position: 'right',
+    viewer_font: 1,
+    viewer_fontline: 180,
+    viewer_fontsize: 18,
+    viewer_nextepi: 'on',
+    viewer_paging: 1,
+    viewer_weight: 400,
+  };
+  // Website font
+  const setWebsiteFont = true;
+  const websiteFont = "'Apple SD Gothic Neo', 'Pretendard', 'Spoqa Han Sans Neo', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif";
+  const websiteFontSelector = 'body, body.dark-mode, div#app, div#novel_drawing_page';
+  // Change title
+  const changeTitle = true;
+  // Change reservation style
+  const changeReservationStyle = true;
 
-  // ########
-  // # Font #
-  // ########
+  // #############################
+  // # Set Cookie & LocalStorage #
+  // #############################
 
-  const font =
-    "font-family: 'Apple SD Gothic Neo', 'Pretendard', 'Spoqa Han Sans Neo', 'Noto Sans KR', 'Nanum Gothic', Arial, sans-serif !important;";
+  // Website style
+  if (setWebsiteStyle) {
+    setCookie('CURSOR', websiteStyle.novelchanCursor ? '1' : null);
+    setCookie('DARKMODE_S', websiteStyle.darkWebsite ? '1' : null);
+    setCookie('DARKMODE', websiteStyle.darkViewer ? '1' : null);
+    setCookie('TOP100_ALL', websiteStyle.pinTop100 ? '1' : null);
+    setCookie('COVER_VIEW', websiteStyle.blockCoverThumbnail ? 'OFF' : 'ON');
+    setCookie('OPEN_THE_DOOR', websiteStyle.blockOpenTheDoor ? 'OFF' : 'ON');
+    setCookie('BLOCK_WRITER_REVIEWS', websiteStyle.blockWriterReview ? 'ON' : 'OFF');
+    setCookie('BLOCK_ILLUSTRATION', websiteStyle.blockIllustration ? 'ON' : 'OFF');
+    setCookie('BLOCK_PARODY', websiteStyle.includeParodyInRanking ? 'ON' : 'OFF');
+  }
 
-  const css_font = `
-    body, body.collapse-menu.dark-mode, div#app, div#novel_drawing_page { ${font} }
-  `;
+  // Remove annoying popups
+  setCookie('is_mybook_banner_modal', '1');
+  setCookie('is_pling_reward_expire_modal', '1');
+
+  // Viewer style
+  if (setViewerStyle) Object.entries(viewerStyle).forEach(([key, value]) => localStorage.setItem(key, value));
+
+  // ##########################
+  // # Hide & Remove Elements #
+  // ##########################
+
+  const hiddenSelectors = [];
+  if (removeAnnoyances) hiddenSelectors.push(...annoyanceSelectors);
+  if (removeUpsells) hiddenSelectors.push(...upsellSelectors);
+
+  if (hiddenSelectors.length > 0) addStyle(`${hiddenSelectors.join(', ')} { display: none !important; }`);
+  if (setWebsiteFont) addStyle(`${websiteFontSelector} { font-family: ${websiteFont} !important; }`);
 
   // ##############
   // # Head Title #
@@ -132,76 +174,12 @@ function GM_removeElements(selectors) {
   };
 
   // ########################
-  // # Network Progress Bar #
-  // ########################
-
-  if (draw_loading_bar) {
-    let activeRequests = 0;
-    const bar = document.createElement('div');
-    Object.assign(bar.style, {
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      width: '0%',
-      height: '3px',
-      backgroundColor: '#007bff',
-      zIndex: '99999',
-      transition: 'width 0.3s ease, opacity 0.3s ease',
-      pointerEvents: 'none',
-    });
-    document.documentElement.appendChild(bar);
-
-    const originalFetch = window.fetch;
-    const originalSend = XMLHttpRequest.prototype.send;
-
-    const updateBar = () => {
-      if (activeRequests <= 0) {
-        activeRequests = 0;
-        bar.style.width = '100%';
-        setTimeout(() => {
-          bar.style.opacity = '0';
-          bar.style.width = '0%';
-        }, 200);
-      } else {
-        bar.style.opacity = '1';
-        let progress = Math.min(90, 10 + activeRequests * 15);
-        bar.style.width = progress + '%';
-      }
-    };
-
-    window.fetch = async function (...args) {
-      activeRequests++;
-      updateBar();
-      try {
-        return await originalFetch(...args);
-      } finally {
-        activeRequests--;
-        updateBar();
-      }
-    };
-
-    XMLHttpRequest.prototype.send = function (...args) {
-      activeRequests++;
-      updateBar();
-      this.addEventListener(
-        'loadend',
-        () => {
-          activeRequests--;
-          updateBar();
-        },
-        { once: true },
-      );
-      return originalSend.apply(this, args);
-    };
-  }
-
-  // ########################
   // # Reservation Chapters #
   // ########################
 
-  const css_reservation_chapters = `
-    div.semi-blur { background-color: #e8e3f9; color: #000; }
-  `;
+  const reservationStyle = `div.semi-blur { background-color: #e8e3f9; color: #000; }`;
+
+  if (changeReservationStyle) addStyle(reservationStyle);
 
   const applyReservationStyle = () => {
     document.querySelectorAll('.novelbox table tbody tr td div').forEach((div) => {
@@ -213,40 +191,24 @@ function GM_removeElements(selectors) {
     });
   };
 
+  // ###################
+  // # Dynamic Changes #
+  // ###################
+
   const applyDynamicChanges = () => {
-    applyHeadTitle();
-    applyReservationStyle();
+    if (changeTitle) applyHeadTitle();
+    if (changeReservationStyle) applyReservationStyle();
   };
-
-  const observer = new MutationObserver(applyDynamicChanges);
-
-  // ###################
-  // # Viewer Settings #
-  // ###################
-
-  const applyViewerSettings = () => {
-    localStorage.setItem('viewer_paging', 1);
-  };
-
-  // ############
-  // # Start Up #
-  // ############
-
-  GM_addStyle(css_font);
-  GM_addStyle(css_general);
-  GM_addStyle(css_reservation_chapters);
-  if (!is_premium) GM_addStyle(css_no_plus);
 
   const onReady = () => {
-    GM_removeElements(removals_general);
-    if (!is_premium) GM_removeElements(removals_no_plus);
+    hiddenSelectors.forEach(removeElements);
     applyDynamicChanges();
-    applyViewerSettings();
-    document.body.addEventListener('click', handleAdClick, true);
-    document.body.style.cssText += font;
+
+    if (changeTitle || changeReservationStyle) {
+      new MutationObserver(applyDynamicChanges).observe(document.body, { childList: true, subtree: true });
+    }
   };
 
-  observer.observe(document.documentElement, { childList: true, subtree: true });
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady, { once: true });
   else onReady();
 })();
