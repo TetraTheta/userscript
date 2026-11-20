@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name Novelpia Style
 // @namespace tetratheta
-// @version 1.6.0
+// @version 1.6.1
 // @description There are too many useless thing
 // @author TetraTheta
 // @grant none
@@ -72,10 +72,6 @@ function setCookie(key, value, expires = 30, path = '/', domain = 'novelpia.com'
     '.mybook-sub-nav.s_inv',
     '.s-logo',
     'a.header-gift .red-dot',
-    'div.mybook-tab-container :nth-child(2)',
-    'div.mybook-tab-container :nth-child(3)',
-    'div.mybook-tab-container-m :nth-child(2)',
-    'div.mybook-tab-container-m :nth-child(3)',
   ];
   // Remove upsells (Comic, NovelChat, Plus)
   const removeUpsells = true;
@@ -120,8 +116,6 @@ function setCookie(key, value, expires = 30, path = '/', domain = 'novelpia.com'
   const websiteFontSelector = 'body, body.dark-mode, div#app, div#novel_drawing_page';
   // Change title
   const changeTitle = true;
-  // Change reservation style
-  const changeReservationStyle = true;
 
   // #############################
   // # Set Cookie & LocalStorage #
@@ -142,6 +136,7 @@ function setCookie(key, value, expires = 30, path = '/', domain = 'novelpia.com'
 
   // Remove annoying popups
   setCookie('is_mybook_banner_modal', '1');
+  setCookie('is_pling_expire_modal', '1');
   setCookie('is_pling_reward_expire_modal', '1');
 
   // Viewer style
@@ -173,40 +168,19 @@ function setCookie(key, value, expires = 30, path = '/', domain = 'novelpia.com'
     if (document.title !== title) document.title = title;
   };
 
-  // ########################
-  // # Reservation Chapters #
-  // ########################
-
-  const reservationStyle = `div.semi-blur { background-color: #e8e3f9; color: #000; }`;
-
-  if (changeReservationStyle) addStyle(reservationStyle);
-
-  const applyReservationStyle = () => {
-    document.querySelectorAll('.novelbox table tbody tr td div').forEach((div) => {
-      if (div.textContent.trim() === '예약회차 있음') {
-        div.classList.add('semi-blur');
-        div.style.backgroundColor = '#e8e3f9';
-        div.style.color = '#000';
-      }
-    });
-  };
-
   // ###################
   // # Dynamic Changes #
   // ###################
 
   const applyDynamicChanges = () => {
     if (changeTitle) applyHeadTitle();
-    if (changeReservationStyle) applyReservationStyle();
   };
 
   const onReady = () => {
     hiddenSelectors.forEach(removeElements);
     applyDynamicChanges();
 
-    if (changeTitle || changeReservationStyle) {
-      new MutationObserver(applyDynamicChanges).observe(document.body, { childList: true, subtree: true });
-    }
+    if (changeTitle) new MutationObserver(applyDynamicChanges).observe(document.body, { childList: true, subtree: true });
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady, { once: true });
